@@ -1,0 +1,237 @@
+﻿@model ChessWebsite.Models.TournamentViewModel
+@{
+    ViewData["Title"] = "Create Tournament - ChessMasters";
+}
+
+<div class="create-tournament-container">
+    <div class="create-header">
+        <h1><i class="fas fa-plus-circle"></i> Create New Tournament</h1>
+        <p>Fill in the details below to create a new chess tournament</p>
+    </div>
+
+    <form asp-action="Create" method="post" class="tournament-form" id="tournamentForm">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-grid">
+            <div class="form-section">
+                <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter tournament name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the tournament..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Type" class="form-label"></label>
+                        <select asp-for="Type" asp-items="Html.GetEnumSelectList<ChessWebsite.Models.TournamentType>()" class="form-control">
+                            <option value="">Select Tournament Type</option>
+                        </select>
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Status" class="form-label"></label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList<ChessWebsite.Models.TournamentStatus>()" class="form-control">
+                            <option value="">Select Status</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-calendar-alt"></i> Schedule</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="form-label"></label>
+                        <input asp-for="StartDate" type="datetime-local" class="form-control" id="StartDate" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="form-label"></label>
+                        <input asp-for="EndDate" type="datetime-local" class="form-control" id="EndDate" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="RegistrationDeadline" class="form-label"></label>
+                    <input asp-for="RegistrationDeadline" type="datetime-local" class="form-control" id="RegistrationDeadline" />
+                    <span asp-validation-for="RegistrationDeadline" class="text-danger"></span>
+                    <small class="form-text text-muted">Optional - if not set, registration closes when tournament starts</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-map-marker-alt"></i> Location & Capacity</h3>
+
+                <div class="form-group">
+                    <label asp-for="Location" class="form-label"></label>
+                    <input asp-for="Location" class="form-control" placeholder="e.g., Online, City Chess Club, etc." />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="MaxParticipants" class="form-label"></label>
+                        <input asp-for="MaxParticipants" type="number" class="form-control" min="2" max="1000" placeholder="Maximum number of players" />
+                        <span asp-validation-for="MaxParticipants" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EntryFee" class="form-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">₱</span>
+                            <input asp-for="EntryFee" type="number" step="0.01" class="form-control" placeholder="0.00" />
+                        </div>
+                        <span asp-validation-for="EntryFee" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section prize-section">
+                <h3><i class="fas fa-trophy"></i> Prize Information (Optional)</h3>
+                <div class="prize-option total-prize-option">
+                    <div class="option-header">
+                        <h4><i class="fas fa-money-bill-wave"></i> Option 1: Total Prize Pool</h4>
+                        <div class="option-toggle">
+                            <input type="radio" id="prizeOptionTotal" name="prizeOption" value="total" onclick="togglePrizeOptions('total')" />
+                            <label for="prizeOptionTotal">Use Total Prize Pool</label>
+                        </div>
+                    </div>
+                    <div class="option-content" id="totalPrizeContent">
+                        <div class="form-group">
+                            <label asp-for="PrizePool" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">₱</span>
+                                <input asp-for="PrizePool" type="number" step="0.01" class="form-control" placeholder="0.00" id="totalPrizeInput" oninput="calculateTotalFromIndividual()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prize-option individual-prizes-option">
+                    <div class="option-header">
+                        <h4><i class="fas fa-medal"></i> Option 2: Individual Place Prizes</h4>
+                        <div class="option-toggle">
+                            <input type="radio" id="prizeOptionIndividual" name="prizeOption" value="individual" onclick="togglePrizeOptions('individual')" />
+                            <label for="prizeOptionIndividual">Use Individual Prizes</label>
+                        </div>
+                    </div>
+                    <div class="option-content" id="individualPrizesContent">
+                        <div class="prize-grid">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <div class="prize-item">
+                                    <h5>@(i)st Place</h5>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" step="0.01" class="form-control individual-prize-input" oninput="calculateIndividualTotal()" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="individual-total-display">
+                            <span>Total: </span><span id="individualPrizesTotal">₱0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-chess-board"></i> Game Settings</h3>
+                <div class="form-group">
+                    <label asp-for="TimeControl" class="form-label"></label>
+                    <input asp-for="TimeControl" class="form-control" placeholder="e.g., 90+30" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rules" class="form-label"></label>
+                    <textarea asp-for="Rules" class="form-control" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-check"></i> Create Tournament
+            </button>
+            <a asp-action="Index" class="btn-cancel">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/tournament.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDateInput = document.getElementById('StartDate');
+            const endDateInput = document.getElementById('EndDate');
+            const deadlineInput = document.getElementById('RegistrationDeadline');
+
+            // Set min dates to "Now"
+            const now = new Date().toISOString().slice(0, 16);
+            startDateInput.min = now;
+
+            // PREFILL LOGIC: Start Date change triggers End Date +5 Hours
+            startDateInput.addEventListener('change', function() {
+                if (this.value) {
+                    const start = new Date(this.value);
+                    const end = new Date(start.getTime() + (5 * 60 * 60 * 1000));
+
+                    // Format for datetime-local
+                    const offset = end.getTimezoneOffset() * 60000;
+                    const localISOTime = (new Date(end - offset)).toISOString().slice(0, 16);
+
+                    endDateInput.value = localISOTime;
+                    endDateInput.min = this.value;
+
+                    if (deadlineInput) {
+                        deadlineInput.max = this.value;
+                    }
+                }
+            });
+
+            initializePrizeOptions();
+        });
+
+        function togglePrizeOptions(option) {
+            const totalContent = document.getElementById('totalPrizeContent');
+            const individualContent = document.getElementById('individualPrizesContent');
+            totalContent.style.display = (option === 'total') ? 'block' : 'none';
+            individualContent.style.display = (option === 'individual') ? 'block' : 'none';
+        }
+
+        function calculateIndividualTotal() {
+            let total = 0;
+            document.querySelectorAll('.individual-prize-input').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('individualPrizesTotal').textContent = '₱' + total.toFixed(2);
+        }
+
+        function initializePrizeOptions() {
+            document.getElementById('prizeOptionTotal').checked = true;
+            togglePrizeOptions('total');
+        }
+    </script>
+}

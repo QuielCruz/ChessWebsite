@@ -1,0 +1,65 @@
+﻿@model ChessWebsite.Models.HomeViewModel
+@{
+    ViewData["Title"] = Model.PageTitle;
+}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2>Master the Game of Kings</h2>
+                <h1>@Model.HeroTitle</h1>
+                <p class="tagline">@Model.HeroSubtitle</p>
+                <p class="description">Step into the world of competitive chess. Challenge opponents, learn from grandmasters, and elevate your game to the next level.</p>
+                <div class="hero-buttons">
+                    <a asp-action="Tournaments" asp-controller="Home" class="btn-primary">Join Tournament</a>
+                    <a asp-action="Lessons" asp-controller="Home" class="btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="chess-board">
+                    <div class="board-container">
+                        <div class="board"></div>
+                        <div class="chess-pieces">
+                            <i class="fas fa-chess-king black-piece"></i>
+                            <i class="fas fa-chess-queen white-piece"></i>
+                            <i class="fas fa-chess-knight black-piece"></i>
+                            <i class="fas fa-chess-rook white-piece"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Why Play Various <span>Tournaments?</span></h2>
+        <div class="features-grid">
+            @foreach (var feature in Model.Features)
+            {
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="@feature.Icon"></i>
+                    </div>
+                    <h3>@feature.Title</h3>
+                    <p>@feature.Description</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Challenge Your Mind?</h2>
+            <p>Join thousands of players who have already improved their chess skills with us. You may be the next <strong><span>ONE!</span></strong></p>
+            <a asp-action="Tournaments" asp-controller="Home" class="btn-cta">Register Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>

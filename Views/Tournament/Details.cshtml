@@ -1,0 +1,498 @@
+﻿@using ChessWebsite.Models
+@model ChessWebsite.Models.Tournament
+@{
+    ViewData["Title"] = Model.Name + " - ChessMasters";
+}
+
+<div class="tournament-details-container">
+    <div class="details-header">
+        <div class="header-left">
+            <a asp-action="Index" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Tournaments
+            </a>
+        </div>
+        <div class="header-right">
+            <div class="admin-actions">
+                <a asp-action="Edit" asp-route-id="@Model.TournamentId" class="btn-edit">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <form asp-action="Delete" asp-route-id="@Model.TournamentId" method="post"
+                      onsubmit="return confirm('Are you sure you want to delete this tournament?');">
+                    <button type="submit" class="btn-delete">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="tournament-banner">
+        <div class="banner-content">
+            <div class="tournament-type @Model.Type.ToString().ToLower()">
+                <i class="fas fa-chess-king"></i>
+                <span>@Model.Type Tournament</span>
+            </div>
+            <h1>@Model.Name</h1>
+            <div class="tournament-status @Model.Status.ToString().ToLower()">
+                @Model.Status
+            </div>
+        </div>
+    </div>
+
+    <div class="details-content">
+        <div class="content-left">
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> Description</h3>
+                <p>@Model.Description</p>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fas fa-calendar-alt"></i> Schedule</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-item">
+                        <div class="schedule-label">Start Date & Time</div>
+                        <div class="schedule-value">@Model.StartDate.ToString("dddd, MMMM dd, yyyy 'at' hh:mm tt")</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-label">End Date & Time</div>
+                        <div class="schedule-value">@Model.EndDate.ToString("dddd, MMMM dd, yyyy 'at' hh:mm tt")</div>
+                    </div>
+                    @if (Model.RegistrationDeadline.HasValue)
+                    {
+                        <div class="schedule-item">
+                            <div class="schedule-label">Registration Deadline</div>
+                            <div class="schedule-value">@Model.RegistrationDeadline.Value.ToString("dddd, MMMM dd, yyyy 'at' hh:mm tt")</div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                <p><i class="fas fa-map-pin"></i> @Model.Location</p>
+                @if (Model.Type == ChessWebsite.Models.TournamentType.Online)
+                {
+                    <div class="online-notice">
+                        <i class="fas fa-laptop-house"></i> This is an online tournament
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Rules))
+            {
+                <div class="info-card">
+                    <h3><i class="fas fa-book"></i> Tournament Rules</h3>
+                    <div class="rules-content">
+                        @Html.Raw(Model.Rules.Replace("\n", "<br>"))
+                    </div>
+                </div>
+            }
+
+            <div class="info-card">
+                <h3><i class="fas fa-chess-board"></i> Game Settings</h3>
+                <div class="game-settings">
+                    <div class="setting-item">
+                        <div class="setting-label">Time Control</div>
+                        <div class="setting-value">@Model.TimeControl</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">Tournament Format</div>
+                        <div class="setting-value">@Model.Type</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-history"></i> Timeline</h3>
+                        <div class="timeline">
+                            <div class="timeline-item @(DateTime.Now >= Model.CreatedDate ? "completed" : "")">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">@Model.CreatedDate.ToString("MMM dd")</div>
+                                    <div class="timeline-title">Tournament Created</div>
+                                </div>
+                            </div>
+                            @if (Model.RegistrationDeadline.HasValue)
+                            {
+                                <div class="timeline-item @(DateTime.Now >= Model.RegistrationDeadline.Value ? "completed" : "active")">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-date">@Model.RegistrationDeadline.Value.ToString("MMM dd, hh:mm tt")</div>
+                                        <div class="timeline-title">Registration Deadline</div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="timeline-item @(DateTime.Now >= Model.StartDate ? "active" : "")">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">@Model.StartDate.ToString("MMM dd, hh:mm tt")</div>
+                                    <div class="timeline-title">Tournament Starts</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-date">@Model.EndDate.ToString("MMM dd, hh:mm tt")</div>
+                                    <div class="timeline-title">Tournament Ends</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="width: 1px; background: #eee; margin: 10px 0;"></div>
+
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="margin-bottom: 20px;"><i class="fas fa-exclamation-circle"></i> Important Notes</h3>
+                        <ul class="important-notes" style="list-style: none; padding-left: 0; font-size: 0.95rem; margin: 0;">
+                            <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #28a745; margin-top: 4px;"></i>
+                                <span>All participants must bring their registration receipt to the venue.</span>
+                            </li>
+                            <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #28a745; margin-top: 4px;"></i>
+                                <span>Entry fee must be paid before you can participate in the tournament.</span>
+                            </li>
+                            @if (Model.EntryFee > 0)
+                            {
+                                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px;">
+                                    <i class="fas fa-check-circle" style="color: #28a745; margin-top: 4px;"></i>
+                                    <span>Refunds available up to 24 hours before start time if the tournament is cancelled.</span>
+                                </li>
+                            }
+                            @if (Model.Type == ChessWebsite.Models.TournamentType.Online)
+                            {
+                                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px;">
+                                    <i class="fas fa-check-circle" style="color: #28a745; margin-top: 4px;"></i>
+                                    <span>Stable internet connection required for online competitions</span>
+                                </li>
+                            }
+                            <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #28a745; margin-top: 4px;"></i>
+                                <span>Late arrivals may forfeit their first game</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-right">
+            <div class="registration-card">
+                <div class="registration-header">
+                    <h3><i class="fas fa-user-plus"></i> Registration</h3>
+                    <div class="participants-count">
+                        <i class="fas fa-users"></i>
+                        <span>@Model.CurrentParticipants / @Model.MaxParticipants</span>
+                    </div>
+                </div>
+
+                <div class="registration-details">
+                    <div class="detail-item">
+                        <i class="fas fa-ticket-alt"></i>
+                        <div>
+                            <div class="detail-label">Entry Fee</div>
+                            <div class="detail-value">₱@Model.EntryFee.ToString("N2")</div>
+                        </div>
+                    </div>
+
+                    @if (Model.PrizePool > 0)
+                    {
+                        <div class="detail-item">
+                            <i class="fas fa-award"></i>
+                            <div>
+                                <div class="detail-label">Total Prize Pool</div>
+                                <div class="total-amount">₱@string.Format("{0:N2}", Model.PrizePool)</div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="detail-item">
+                        <i class="fas fa-chess-clock"></i>
+                        <div>
+                            <div class="detail-label">Time Control</div>
+                            <div class="detail-value">@Model.TimeControl</div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.Status == ChessWebsite.Models.TournamentStatus.RegistrationOpen)
+                {
+                    @if (Model.CurrentParticipants < Model.MaxParticipants)
+                    {
+                        <form asp-action="Register" asp-route-id="@Model.TournamentId" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-register-full">
+                                <i class="fas fa-check-circle"></i> Register Now
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="tournament-full">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Tournament is Full</span>
+                        </div>
+                    }
+
+                    @if (Model.RegistrationDeadline.HasValue)
+                    {
+                        <div class="deadline-notice">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Registration closes @Model.RegistrationDeadline.Value.ToString("MMM dd, hh:mm tt")
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="registration-closed">
+                        <i class="fas fa-lock"></i>
+                        <span>Registration is @Model.Status.ToString()</span>
+                    </div>
+                }
+            </div>
+
+            @if (Model.PrizePool.HasValue || Model.HasIndividualPrizes)
+            {
+                <div class="info-card">
+                    <h3><i class="fas fa-trophy"></i> Prize Information</h3>
+
+                    @if (Model.PrizePool.HasValue && !Model.HasIndividualPrizes)
+                    {
+                        <div class="prize-display total-prize">
+                            <div class="prize-header">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <h4>Total Prize Pool</h4>
+                            </div>
+                            <div class="prize-amount-large">
+                                ₱@Model.PrizePool.Value.ToString("N2")
+                            </div>
+                            <p class="prize-note">
+                                <i class="fas fa-info-circle"></i>
+                                Prize distribution will be announced before the tournament starts.
+                            </p>
+                        </div>
+                    }
+                    else if (Model.HasIndividualPrizes)
+                    {
+                        <div class="prize-display individual-prizes">
+                            <div class="prize-breakdown">
+                                <div class="prize-list">
+                                    @if (Model.FirstPlacePrize.HasValue)
+                                    {
+                                        <div class="prize-list-item first">
+                                            <div class="prize-place">
+                                                <i class="fas fa-crown"></i>
+                                                <span>1st Place</span>
+                                            </div>
+                                            <div class="prize-amount-display">₱@Model.FirstPlacePrize.Value.ToString("N2")</div>
+                                        </div>
+                                    }
+                                    @if (Model.SecondPlacePrize.HasValue)
+                                    {
+                                        <div class="prize-list-item second">
+                                            <div class="prize-place">
+                                                <i class="fas fa-medal"></i>
+                                                <span>2nd Place</span>
+                                            </div>
+                                            <div class="prize-amount-display">₱@Model.SecondPlacePrize.Value.ToString("N2")</div>
+                                        </div>
+                                    }
+                                    @if (Model.ThirdPlacePrize.HasValue)
+                                    {
+                                        <div class="prize-list-item third">
+                                            <div class="prize-place">
+                                                <i class="fas fa-medal"></i>
+                                                <span>3rd Place</span>
+                                            </div>
+                                            <div class="prize-amount-display">₱@Model.ThirdPlacePrize.Value.ToString("N2")</div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="prize-total-summary">
+                                    <div class="total-label">Total Prize Pool:</div>
+                                    <div class="total-amount">₱@Model.DisplayPrizePool.ToString("N2")</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="organizer-card">
+                <h3><i class="fas fa-user-tie"></i> Organizer</h3>
+                <div class="organizer-details">
+                    <div class="organizer-name">@Model.OrganizerName</div>
+                    @if (!string.IsNullOrEmpty(Model.ContactEmail))
+                    {
+                        <div class="organizer-contact">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:@Model.ContactEmail">@Model.ContactEmail</a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <h3><i class="fas fa-chart-bar"></i> Tournament Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">@Model.MaxParticipants</div>
+                        <div class="stat-label">Max Players</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">@Model.CurrentParticipants</div>
+                        <div class="stat-label">Registered</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">@(Model.MaxParticipants - Model.CurrentParticipants)</div>
+                        <div class="stat-label">Spots Left</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: @((Model.CurrentParticipants * 100) / Model.MaxParticipants)%"></div>
+                </div>
+
+                <div class="additional-stats">
+                    <div class="stat-item-small">
+                        <div class="stat-label-small">Entry Fee</div>
+                        <div class="stat-value-small">₱@Model.EntryFee.ToString("N2")</div>
+                    </div>
+                    @if (Model.RegistrationDeadline.HasValue)
+                    {
+                        <div class="stat-item-small">
+                            <div class="stat-label-small">Registration Closes</div>
+                            <div class="stat-value-small">@Model.RegistrationDeadline.Value.ToString("MMM dd")</div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="quick-actions-card">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="btn-action share-btn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                    <button class="btn-action calendar-btn">
+                        <i class="fas fa-calendar-plus"></i> Add to Calendar
+                    </button>
+                    <button class="btn-action remind-btn">
+                        <i class="fas fa-bell"></i> Set Reminder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{
+        var relatedTournaments = ViewBag.RelatedTournaments as List<Tournament>;
+        if (relatedTournaments != null && relatedTournaments.Any())
+        {
+            <div class="related-tournaments">
+                <h3><i class="fas fa-chess-board"></i> You Might Also Like</h3>
+                <div class="related-grid">
+                    @foreach (var related in relatedTournaments.Take(3))
+                    {
+                        <div class="related-card">
+                            <div class="related-header">
+                                <div class="related-type @related.Type.ToString().ToLower()">@related.Type</div>
+                                <div class="related-status @related.Status.ToString().ToLower()">@related.Status</div>
+                            </div>
+                            <div class="related-body">
+                                <h4>@related.Name</h4>
+                                <div class="related-details">
+                                    <div class="related-detail"><i class="fas fa-calendar"></i> @related.StartDate.ToString("MMM dd")</div>
+                                    <div class="related-detail"><i class="fas fa-users"></i> @related.CurrentParticipants/@related.MaxParticipants</div>
+                                </div>
+                                <a asp-action="Details" asp-route-id="@related.TournamentId" class="btn-related">View Details</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/tournament.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Share functionality
+            document.querySelector('.share-btn')?.addEventListener('click', function() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: '@Model.Name',
+                        text: 'Check out this chess tournament!',
+                        url: window.location.href
+                    });
+                } else {
+                    // Fallback: Copy to clipboard
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                }
+            });
+
+            // Add to calendar
+            document.querySelector('.calendar-btn')?.addEventListener('click', function() {
+                const startDate = new Date('@Model.StartDate.ToString("o")');
+                const endDate = new Date('@Model.EndDate.ToString("o")');
+
+                const calendarEvent = {
+                    title: '@Model.Name',
+                    description: '@Model.Description',
+                    location: '@Model.Location',
+                    startTime: startDate,
+                    endTime: endDate
+                };
+
+                // Create .ics file or use Google Calendar URL
+                const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(calendarEvent.title)}&dates=${startDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z/${endDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z&details=${encodeURIComponent(calendarEvent.description)}&location=${encodeURIComponent(calendarEvent.location)}`;
+
+                window.open(googleCalendarUrl, '_blank');
+            });
+
+            // Set reminder
+            document.querySelector('.remind-btn')?.addEventListener('click', function() {
+                const startDate = new Date('@Model.StartDate.ToString("o")');
+                const reminderDate = new Date(startDate.getTime() - (24 * 60 * 60 * 1000)); // 24 hours before
+
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    // Schedule notification
+                    setTimeout(() => {
+                        new Notification('Tournament Reminder', {
+                            body: '@Model.Name starts tomorrow!',
+                            icon: '/favicon.ico'
+                        });
+                    }, reminderDate.getTime() - Date.now());
+
+                    alert('Reminder set for 24 hours before the tournament starts!');
+                } else if ('Notification' in window && Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            alert('Reminder set for 24 hours before the tournament starts!');
+                        }
+                    });
+                } else {
+                    alert('Please enable notifications to set reminders.');
+                }
+            });
+
+            // Progress bar animation
+            const progressFill = document.querySelector('.progress-fill');
+            if (progressFill) {
+                const width = progressFill.style.width;
+                progressFill.style.width = '0';
+                setTimeout(() => {
+                    progressFill.style.transition = 'width 1.5s ease-in-out';
+                    progressFill.style.width = width;
+                }, 300);
+            }
+        });
+    </script>
+}
