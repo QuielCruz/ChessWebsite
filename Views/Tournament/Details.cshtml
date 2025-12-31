@@ -12,17 +12,22 @@
             </a>
         </div>
         <div class="header-right">
-            <div class="admin-actions">
-                <a asp-action="Edit" asp-route-id="@Model.TournamentId" class="btn-edit">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
-                <form asp-action="Delete" asp-route-id="@Model.TournamentId" method="post"
-                      onsubmit="return confirm('Are you sure you want to delete this tournament?');">
-                    <button type="submit" class="btn-delete">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </form>
-            </div>
+            <!-- Admin actions - only visible to admins -->
+            @if (ViewBag.IsAdmin == true)
+            {
+                <div class="admin-actions">
+                    <a asp-action="Edit" asp-route-id="@Model.TournamentId" class="btn-edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <form asp-action="Delete" asp-route-id="@Model.TournamentId" method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this tournament?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-delete">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            }
         </div>
     </div>
 
@@ -197,13 +202,13 @@
                         </div>
                     </div>
 
-                    @if (Model.PrizePool > 0)
+                    @if (Model.DisplayPrizePool > 0)
                     {
                         <div class="detail-item">
                             <i class="fas fa-award"></i>
                             <div>
                                 <div class="detail-label">Total Prize Pool</div>
-                                <div class="total-amount">₱@string.Format("{0:N2}", Model.PrizePool)</div>
+                                <div class="total-amount">₱@Model.DisplayPrizePool.ToString("N2")</div>
                             </div>
                         </div>
                     }

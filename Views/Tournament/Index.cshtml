@@ -7,14 +7,18 @@
     <!-- Header Section -->
     <div class="tournaments-header">
         <div class="header-content">
-            <h1><i class="fas fa-trophy"></i> Chess Tournaments</h1>
+            <h1><i class="fas fa-trophy"></i> Chess Events</h1>
             <p>Join competitive tournaments and test your skills against players from around the world</p>
         </div>
-        <div class="header-actions">
-            <a asp-action="Create" class="btn-admin">
-                <i class="fas fa-plus"></i> Create Tournament
-            </a>
-        </div>
+        <!-- Show Create Tournament button only for admins -->
+        @if (ViewBag.IsAdmin == true)
+        {
+            <div class="header-actions">
+                <a asp-action="Create" class="btn-admin">
+                    <i class="fas fa-plus"></i> Create Tournament
+                </a>
+            </div>
+        }
     </div>
 
     <!-- Filters Section -->
@@ -142,22 +146,28 @@
                                                         && tournament.CurrentParticipants < tournament.MaxParticipants)
                                 {
                                     <form asp-action="Register" asp-route-id="@tournament.TournamentId" method="post">
+                                        @Html.AntiForgeryToken()
                                         <button type="submit" class="btn-register">
                                             <i class="fas fa-user-plus"></i> Register
                                         </button>
                                     </form>
                                 }
-                                <div class="admin-actions">
-                                    <a asp-action="Edit" asp-route-id="@tournament.TournamentId" class="btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form asp-action="Delete" asp-route-id="@tournament.TournamentId" method="post"
-                                          onsubmit="return confirm('Are you sure you want to delete this tournament?');">
-                                        <button type="submit" class="btn-delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                <!-- Admin actions - only visible to admins -->
+                                @if (ViewBag.IsAdmin == true)
+                                {
+                                    <div class="admin-actions">
+                                        <a asp-action="Edit" asp-route-id="@tournament.TournamentId" class="btn-edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="Delete" asp-route-id="@tournament.TournamentId" method="post"
+                                              onsubmit="return confirm('Are you sure you want to delete this tournament?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

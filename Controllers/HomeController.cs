@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ChessWebsite.Models;
 
 namespace ChessWebsite.Controllers
@@ -7,6 +8,12 @@ namespace ChessWebsite.Controllers
     {
         public IActionResult Index()
         {
+            // Check if user is authenticated
+            ViewBag.IsLoggedIn = User.Identity?.IsAuthenticated ?? false;
+
+            // Check if user is admin (has Admin role)
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
             var viewModel = new HomeViewModel
             {
                 PageTitle = "Chess Masters - Home",
@@ -40,8 +47,15 @@ namespace ChessWebsite.Controllers
 
         public IActionResult Tournaments()
         {
-            // Redirect to Tournament controller
             return RedirectToAction("Index", "Tournament");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminPanel()
+        {
+            ViewBag.IsAdmin = true;
+            ViewBag.IsLoggedIn = true;
+            return View();
         }
     }
 }

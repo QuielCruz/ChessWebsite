@@ -4,6 +4,7 @@ using ChessWebsite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Website_for_Chess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251230133536_addadminloginandregistration")]
+    partial class addadminloginandregistration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,21 +133,21 @@ namespace Website_for_Chess.Migrations
                             TournamentId = 1,
                             ContactEmail = "championship@chessfed.org",
                             CreatedByUserId = 1,
-                            CreatedDate = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7791),
+                            CreatedDate = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7618),
                             CurrentParticipants = 45,
                             Description = "Annual championship for elite chess players with substantial prize pool",
-                            EndDate = new DateTime(2026, 1, 31, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7779),
+                            EndDate = new DateTime(2026, 1, 31, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7626),
                             EntryFee = 500.00m,
                             IsActive = true,
-                            LastUpdated = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7792),
+                            LastUpdated = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7619),
                             Location = "International Convention Center",
                             MaxParticipants = 100,
                             Name = "Grand Chess Championship 2024",
                             OrganizerName = "Chess Federation International",
                             PrizePool = 50000.00m,
-                            RegistrationDeadline = new DateTime(2026, 1, 24, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7787),
+                            RegistrationDeadline = new DateTime(2026, 1, 24, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7634),
                             Rules = "FIDE rules apply. Minimum rating: 2000. Dress code: Formal.",
-                            StartDate = new DateTime(2026, 1, 29, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7774),
+                            StartDate = new DateTime(2026, 1, 29, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7621),
                             Status = 1,
                             TimeControl = "120+30",
                             Type = 5
@@ -154,21 +157,21 @@ namespace Website_for_Chess.Migrations
                             TournamentId = 2,
                             ContactEmail = "events@citychessclub.com",
                             CreatedByUserId = 1,
-                            CreatedDate = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7798),
+                            CreatedDate = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7639),
                             CurrentParticipants = 32,
                             Description = "Fast-paced blitz tournament for speed chess enthusiasts",
-                            EndDate = new DateTime(2026, 1, 6, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7795),
+                            EndDate = new DateTime(2026, 1, 6, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7641),
                             EntryFee = 25.00m,
                             IsActive = true,
-                            LastUpdated = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7799),
+                            LastUpdated = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7640),
                             Location = "City Chess Club",
                             MaxParticipants = 50,
                             Name = "Blitz Battle Royale",
                             OrganizerName = "City Chess Club",
                             PrizePool = 1000.00m,
-                            RegistrationDeadline = new DateTime(2026, 1, 4, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7797),
+                            RegistrationDeadline = new DateTime(2026, 1, 4, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7644),
                             Rules = "Blitz rules. No delay. Double elimination format.",
-                            StartDate = new DateTime(2026, 1, 6, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7794),
+                            StartDate = new DateTime(2026, 1, 6, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7641),
                             Status = 1,
                             TimeControl = "3+2",
                             Type = 3
@@ -178,21 +181,21 @@ namespace Website_for_Chess.Migrations
                             TournamentId = 3,
                             ContactEmail = "tournaments@chessmasters.com",
                             CreatedByUserId = 1,
-                            CreatedDate = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7804),
+                            CreatedDate = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7645),
                             CurrentParticipants = 178,
                             Description = "Weekly online rapid chess tournament open to all players",
-                            EndDate = new DateTime(2026, 1, 2, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7802),
+                            EndDate = new DateTime(2026, 1, 2, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7647),
                             EntryFee = 10.00m,
                             IsActive = true,
-                            LastUpdated = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7805),
+                            LastUpdated = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7646),
                             Location = "Online - ChessMasters Platform",
                             MaxParticipants = 200,
                             Name = "Online Rapid Arena",
                             OrganizerName = "ChessMasters",
                             PrizePool = 2000.00m,
-                            RegistrationDeadline = new DateTime(2026, 1, 1, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7803),
+                            RegistrationDeadline = new DateTime(2026, 1, 1, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7649),
                             Rules = "Platform rules apply. Fair play monitored. No takebacks.",
-                            StartDate = new DateTime(2026, 1, 2, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7801),
+                            StartDate = new DateTime(2026, 1, 2, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7646),
                             Status = 0,
                             TimeControl = "15+10",
                             Type = 6
@@ -272,11 +275,11 @@ namespace Website_for_Chess.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7226),
+                            CreatedAt = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7444),
                             Email = "admin@chessmasters.com",
                             IsActive = true,
                             IsAdmin = true,
-                            LastLogin = new DateTime(2025, 12, 30, 21, 45, 28, 213, DateTimeKind.Local).AddTicks(7240),
+                            LastLogin = new DateTime(2025, 12, 30, 21, 35, 35, 776, DateTimeKind.Local).AddTicks(7447),
                             PasswordHash = "6G94qKPK8LYNjnTllCqm2G3BUM08AzOK7yW30tfjrMc=",
                             Username = "admin"
                         });

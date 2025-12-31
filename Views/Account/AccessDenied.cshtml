@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Access Denied - ChessMasters";
+    ViewBag.IsLoggedIn = false;
+    ViewBag.IsAdmin = false;
+}
+
+<div class="access-denied-container">
+    <div class="access-denied-content">
+        <div class="chess-piece">
+            <i class="fas fa-chess-rook"></i>
+        </div>
+        <h1>Access Denied</h1>
+        <p>You don't have permission to access this resource. This area is restricted to administrators only.</p>
+
+        <div class="action-buttons">
+            <a asp-action="Login" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Admin Login
+            </a>
+            <a asp-action="Index" asp-controller="Home" class="btn-home">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .access-denied-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+
+        .access-denied-content {
+            text-align: center;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .chess-piece {
+            font-size: 5rem;
+            color: #dc3545;
+            margin-bottom: 1.5rem;
+            animation: shake 0.5s ease-in-out infinite alternate;
+        }
+
+        h1 {
+            color: #dc3545;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-login, .btn-home {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-home {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e1e5e9;
+        }
+
+            .btn-login:hover, .btn-home:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+        @@keyframes shake {
+            from
+
+        {
+            transform: rotate(-5deg);
+        }
+
+        to {
+            transform: rotate(5deg);
+        }
+
+        }
+
+        @@media (max-width: 768px) {
+            .action-buttons
+
+        {
+            flex-direction: column;
+        }
+
+        .access-denied-content {
+            padding: 2rem;
+        }
+
+        }
+    </style>
+}

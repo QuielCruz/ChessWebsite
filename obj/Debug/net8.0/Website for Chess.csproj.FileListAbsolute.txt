@@ -1,21 +1,8 @@
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.csproj.AssemblyReference.cache
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.AssemblyInfoInputs.cache
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.AssemblyInfo.cs
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.csproj.CoreCompileInputs.cache
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.RazorAssemblyInfo.cache
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.RazorAssemblyInfo.cs
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.exe
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\appsettings.json
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.staticwebassets.runtime.json
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.staticwebassets.endpoints.json
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.exe
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.deps.json
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.runtimeconfig.json
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.dll
-C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.pdb
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Humanizer.dll
@@ -30,7 +17,14 @@ C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Micr
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Extensions.WebEncoders.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Identity.Client.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
@@ -53,7 +47,9 @@ C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Syst
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Memory.Data.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Security.Permissions.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\System.Windows.Extensions.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
@@ -118,8 +114,19 @@ C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runt
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.csproj.AssemblyReference.cache
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.AssemblyInfoInputs.cache
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.AssemblyInfo.cs
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.csproj.CoreCompileInputs.cache
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.RazorAssemblyInfo.cache
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.RazorAssemblyInfo.cs
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.sourcelink.json
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\rjimswa.dswa.cache.json
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
@@ -134,6 +141,10 @@ C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Webs
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\refint\Website for Chess.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.pdb
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.deps.json
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.runtimeconfig.json
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.dll
+C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\bin\Debug\net8.0\Website for Chess.pdb
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\Website for Chess.genruntimeconfig.cache
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\ref\Website for Chess.dll
 C:\Users\Sealtiel Baraquiel\source\repos\Website for Chess\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

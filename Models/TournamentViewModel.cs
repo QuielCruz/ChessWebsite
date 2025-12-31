@@ -76,6 +76,7 @@ namespace ChessWebsite.Models
         [DataType(DataType.Currency)]
         public decimal? FifthPlacePrize { get; set; }
 
+        [Required(ErrorMessage = "Status is required")]
         [Display(Name = "Status")]
         public TournamentStatus Status { get; set; } = TournamentStatus.Upcoming;
 
@@ -102,8 +103,11 @@ namespace ChessWebsite.Models
             (FourthPlacePrize ?? 0) + (FifthPlacePrize ?? 0);
 
         [NotMapped]
-        public bool HasIndividualPrizes => FirstPlacePrize.HasValue || SecondPlacePrize.HasValue ||
-                                          ThirdPlacePrize.HasValue || FourthPlacePrize.HasValue ||
-                                          FifthPlacePrize.HasValue;
+        public bool HasIndividualPrizes =>
+            (FirstPlacePrize.HasValue && FirstPlacePrize.Value > 0) ||
+            (SecondPlacePrize.HasValue && SecondPlacePrize.Value > 0) ||
+            (ThirdPlacePrize.HasValue && ThirdPlacePrize.Value > 0) ||
+            (FourthPlacePrize.HasValue && FourthPlacePrize.Value > 0) ||
+            (FifthPlacePrize.HasValue && FifthPlacePrize.Value > 0);
     }
 }

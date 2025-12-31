@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,15 +18,16 @@ namespace ChessWebsite.Controllers
             _context = context;
         }
 
-        // GET: Tournament - List all tournaments
         public async Task<IActionResult> Index(string search, string status, string type, int page = 1)
         {
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+            ViewBag.IsLoggedIn = User.Identity?.IsAuthenticated ?? false;
+
             int pageSize = 9;
 
             IQueryable<Tournament> tournamentsQuery = _context.Tournaments
                 .Where(t => t.IsActive);
 
-            // Apply filters
             if (!string.IsNullOrEmpty(search))
             {
                 tournamentsQuery = tournamentsQuery.Where(t =>
@@ -44,7 +46,6 @@ namespace ChessWebsite.Controllers
                 tournamentsQuery = tournamentsQuery.Where(t => t.Type == typeEnum);
             }
 
-            // Sort by upcoming tournaments first
             tournamentsQuery = tournamentsQuery.OrderBy(t => t.StartDate);
 
             var totalTournaments = await tournamentsQuery.CountAsync();
@@ -64,7 +65,6 @@ namespace ChessWebsite.Controllers
             return View(tournaments);
         }
 
-        // GET: Tournament/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -80,7 +80,10 @@ namespace ChessWebsite.Controllers
                 return NotFound();
             }
 
-            // Get related tournaments for suggestions
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+            ViewBag.IsLoggedIn = User.Identity?.IsAuthenticated ?? false;
+            ViewBag.CanEdit = CanEditTournament(tournament) && User.IsInRole("Admin");
+
             var relatedTournaments = await _context.Tournaments
                 .Where(t => t.IsActive &&
                            t.TournamentId != id &&
@@ -95,23 +98,40 @@ namespace ChessWebsite.Controllers
             return View(tournament);
         }
 
-        // GET: Tournament/Create
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            ViewBag.IsAdmin = true;
+            ViewBag.IsLoggedIn = true;
             return View();
         }
 
-        // POST: Tournament/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(TournamentViewModel tournamentVM)
         {
-            // Validate prize options
-            if (tournamentVM.PrizePool.HasValue && tournamentVM.HasIndividualPrizes)
+            if (!User.IsInRole("Admin"))
+            {
+                TempData["ErrorMessage"] = "Admin access required to create tournaments.";
+                return RedirectToAction("Index");
+            }
+
+            // Check if BOTH prize options are filled
+            bool hasPrizePool = tournamentVM.PrizePool.HasValue && tournamentVM.PrizePool.Value > 0;
+            bool hasIndividualPrizes = tournamentVM.HasIndividualPrizes;
+
+            if (hasPrizePool && hasIndividualPrizes)
             {
                 ModelState.AddModelError("PrizePool", "Please specify either a total prize pool OR individual place prizes, not both.");
-                ModelState.AddModelError("FirstPlacePrize", "Please specify either a total prize pool OR individual place prizes, not both.");
+            }
+
+            // If neither prize option is filled, that's okay (no prizes)
+            // Clear the error if only one or neither is filled
+            if (!hasPrizePool && !hasIndividualPrizes)
+            {
+                // No prizes - that's acceptable
             }
 
             if (ModelState.IsValid)
@@ -150,13 +170,21 @@ namespace ChessWebsite.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // If we got this far, something failed, redisplay form
+            ViewBag.IsAdmin = true;
+            ViewBag.IsLoggedIn = true;
             return View(tournamentVM);
         }
 
-        // GET: Tournament/Edit/5
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                TempData["ErrorMessage"] = "Admin access required to edit tournaments.";
+                return RedirectToAction("Details", new { id });
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -166,6 +194,12 @@ namespace ChessWebsite.Controllers
             if (tournament == null)
             {
                 return NotFound();
+            }
+
+            if (!CanEditTournament(tournament))
+            {
+                TempData["ErrorMessage"] = "Cannot edit tournament after registration deadline has passed.";
+                return RedirectToAction(nameof(Details), new { id });
             }
 
             var tournamentVM = new TournamentViewModel
@@ -193,36 +227,52 @@ namespace ChessWebsite.Controllers
                 Rules = tournament.Rules
             };
 
+            ViewBag.IsAdmin = true;
+            ViewBag.IsLoggedIn = true;
             return View(tournamentVM);
         }
 
-        // POST: Tournament/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, TournamentViewModel tournamentVM)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                TempData["ErrorMessage"] = "Admin access required to edit tournaments.";
+                return RedirectToAction("Details", new { id });
+            }
+
             if (id != tournamentVM.TournamentId)
             {
                 return NotFound();
             }
 
-            // Validate prize options
-            if (tournamentVM.PrizePool.HasValue && tournamentVM.HasIndividualPrizes)
+            var tournament = await _context.Tournaments.FindAsync(id);
+            if (tournament == null)
+            {
+                return NotFound();
+            }
+
+            if (!CanEditTournament(tournament))
+            {
+                TempData["ErrorMessage"] = "Cannot edit tournament after registration deadline has passed.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            // Check if BOTH prize options are filled
+            bool hasPrizePool = tournamentVM.PrizePool.HasValue && tournamentVM.PrizePool.Value > 0;
+            bool hasIndividualPrizes = tournamentVM.HasIndividualPrizes;
+
+            if (hasPrizePool && hasIndividualPrizes)
             {
                 ModelState.AddModelError("PrizePool", "Please specify either a total prize pool OR individual place prizes, not both.");
-                ModelState.AddModelError("FirstPlacePrize", "Please specify either a total prize pool OR individual place prizes, not both.");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var tournament = await _context.Tournaments.FindAsync(id);
-                    if (tournament == null)
-                    {
-                        return NotFound();
-                    }
-
                     tournament.Name = tournamentVM.Name;
                     tournament.Description = tournamentVM.Description;
                     tournament.StartDate = tournamentVM.StartDate;
@@ -261,19 +311,34 @@ namespace ChessWebsite.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id });
             }
+
+            ViewBag.IsAdmin = true;
+            ViewBag.IsLoggedIn = true;
             return View(tournamentVM);
         }
 
-        // POST: Tournament/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                TempData["ErrorMessage"] = "Admin access required to delete tournaments.";
+                return RedirectToAction("Details", new { id });
+            }
+
             var tournament = await _context.Tournaments.FindAsync(id);
             if (tournament != null)
             {
+                if (!CanEditTournament(tournament))
+                {
+                    TempData["ErrorMessage"] = "Cannot delete tournament after registration deadline has passed.";
+                    return RedirectToAction(nameof(Details), new { id });
+                }
+
                 tournament.IsActive = false;
                 tournament.LastUpdated = DateTime.Now;
                 await _context.SaveChangesAsync();
@@ -283,7 +348,6 @@ namespace ChessWebsite.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Tournament/Register/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(int id)
@@ -311,6 +375,18 @@ namespace ChessWebsite.Controllers
         private bool TournamentExists(int id)
         {
             return _context.Tournaments.Any(e => e.TournamentId == id);
+        }
+
+        private bool CanEditTournament(Tournament tournament)
+        {
+            if (!User.IsInRole("Admin")) return false;
+
+            if (tournament.RegistrationDeadline.HasValue)
+            {
+                return DateTime.Now <= tournament.RegistrationDeadline.Value;
+            }
+
+            return DateTime.Now <= tournament.StartDate;
         }
     }
 }

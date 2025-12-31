@@ -1,16 +1,24 @@
 ﻿@model ChessWebsite.Models.TournamentViewModel
 @{
-    ViewData["Title"] = "Create Tournament - ChessMasters";
+    ViewData["Title"] = "Edit Tournament - ChessMasters";
 }
 
 <div class="create-tournament-container">
     <div class="create-header">
-        <h1><i class="fas fa-plus-circle"></i> Create New Tournament</h1>
-        <p>Fill in the details below to create a new chess tournament</p>
+        <h1><i class="fas fa-edit"></i> Edit Tournament</h1>
+        <p>Update the details of your chess tournament</p>
     </div>
 
-    <form asp-action="Create" method="post" class="tournament-form" id="tournamentForm">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-action="Edit" method="post" class="tournament-form" id="tournamentForm">
         @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="TournamentId" />
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -20,16 +28,13 @@
 
                 <div class="form-group">
                     <label asp-for="Name" class="form-label"></label>
-                    <input asp-for="Name" class="form-control" placeholder="Enter tournament name"
-                           value="@(Model?.Name ?? "")" />
+                    <input asp-for="Name" class="form-control" placeholder="Enter tournament name" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="Description" class="form-label"></label>
-                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the tournament...">
-                        @(Model?.Description ?? "")
-                    </textarea>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the tournament..."></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
@@ -59,14 +64,14 @@
                     <div class="form-group">
                         <label asp-for="StartDate" class="form-label"></label>
                         <input asp-for="StartDate" type="datetime-local" class="form-control" id="StartDate"
-                               value="@(Model?.StartDate.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+                               value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" />
                         <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="EndDate" class="form-label"></label>
                         <input asp-for="EndDate" type="datetime-local" class="form-control" id="EndDate"
-                               value="@(Model?.EndDate.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+                               value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -74,7 +79,7 @@
                 <div class="form-group">
                     <label asp-for="RegistrationDeadline" class="form-label"></label>
                     <input asp-for="RegistrationDeadline" type="datetime-local" class="form-control" id="RegistrationDeadline"
-                           value="@(Model?.RegistrationDeadline?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+                           value="@(Model.RegistrationDeadline?.ToString("yyyy-MM-ddTHH:mm"))" />
                     <span asp-validation-for="RegistrationDeadline" class="text-danger"></span>
                     <small class="form-text text-muted">Optional - if not set, registration closes when tournament starts</small>
                 </div>
@@ -85,16 +90,14 @@
 
                 <div class="form-group">
                     <label asp-for="Location" class="form-label"></label>
-                    <input asp-for="Location" class="form-control" placeholder="e.g., Online, City Chess Club, etc."
-                           value="@(Model?.Location ?? "")" />
+                    <input asp-for="Location" class="form-control" placeholder="e.g., Online, City Chess Club, etc." />
                     <span asp-validation-for="Location" class="text-danger"></span>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label asp-for="MaxParticipants" class="form-label"></label>
-                        <input asp-for="MaxParticipants" type="number" class="form-control" min="2" max="1000" placeholder="Maximum number of players"
-                               value="@(Model?.MaxParticipants.ToString() ?? "")" />
+                        <input asp-for="MaxParticipants" type="number" class="form-control" min="2" max="1000" placeholder="Maximum number of players" />
                         <span asp-validation-for="MaxParticipants" class="text-danger"></span>
                     </div>
 
@@ -102,8 +105,7 @@
                         <label asp-for="EntryFee" class="form-label"></label>
                         <div class="input-group">
                             <span class="input-group-text">₱</span>
-                            <input asp-for="EntryFee" type="number" step="0.01" class="form-control" placeholder="0.00"
-                                   value="@(Model?.EntryFee.ToString("") ?? "")" />
+                            <input asp-for="EntryFee" type="number" step="0.01" class="form-control" placeholder="0.00" />
                         </div>
                         <span asp-validation-for="EntryFee" class="text-danger"></span>
                     </div>
@@ -112,27 +114,26 @@
 
             <div class="form-section prize-section">
                 <h3><i class="fas fa-trophy"></i> Prize Information (Optional)</h3>
-
-                <!-- Hidden field to track which option is selected -->
-                <input type="hidden" id="SelectedPrizeOption" name="SelectedPrizeOption" value="total" />
-
                 <div class="prize-option total-prize-option">
                     <div class="option-header">
                         <h4><i class="fas fa-money-bill-wave"></i> Option 1: Total Prize Pool</h4>
                         <div class="option-toggle">
-                            <input type="radio" id="prizeOptionTotal" name="prizeOption" value="total" onclick="togglePrizeOptions('total')" />
+                            @{
+                                var useTotalPrize = Model.PrizePool.HasValue && !Model.HasIndividualPrizes;
+                            }
+                            <input type="radio" id="prizeOptionTotal" name="prizeOption" value="total"
+                                   @(useTotalPrize ? "checked" : "") onclick="togglePrizeOptions('total')" />
                             <label for="prizeOptionTotal">Use Total Prize Pool</label>
                         </div>
                     </div>
-                    <div class="option-content" id="totalPrizeContent">
+                    <div class="option-content" id="totalPrizeContent" style="display: @(useTotalPrize ? "block" : "none")">
                         <div class="form-group">
                             <label asp-for="PrizePool" class="form-label"></label>
                             <div class="input-group">
                                 <span class="input-group-text">₱</span>
-                                <input asp-for="PrizePool" type="number" step="0.01" class="form-control" placeholder="0.00"
-                                       id="totalPrizeInput" value="@(Model?.PrizePool?.ToString("") ?? "")" />
+                                <input asp-for="PrizePool" type="number" step="0.01" class="form-control"
+                                       placeholder="0.00" id="totalPrizeInput" value="@Model.PrizePool" />
                             </div>
-                            <span asp-validation-for="PrizePool" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -141,69 +142,56 @@
                     <div class="option-header">
                         <h4><i class="fas fa-medal"></i> Option 2: Individual Place Prizes</h4>
                         <div class="option-toggle">
-                            <input type="radio" id="prizeOptionIndividual" name="prizeOption" value="individual" onclick="togglePrizeOptions('individual')" />
+                            <input type="radio" id="prizeOptionIndividual" name="prizeOption" value="individual"
+                                   @(Model.HasIndividualPrizes ? "checked" : "") onclick="togglePrizeOptions('individual')" />
                             <label for="prizeOptionIndividual">Use Individual Prizes</label>
                         </div>
                     </div>
-                    <div class="option-content" id="individualPrizesContent">
+                    <div class="option-content" id="individualPrizesContent" style="display: @(Model.HasIndividualPrizes ? "block" : "none")">
                         <div class="prize-grid">
                             <div class="prize-item">
                                 <h5>1st Place</h5>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
                                     <input asp-for="FirstPlacePrize" type="number" step="0.01" class="form-control individual-prize-input"
-                                           oninput="calculateIndividualTotal()" placeholder="0.00"
-                                           value="@(Model?.FirstPlacePrize?.ToString("") ?? "")" />
+                                           oninput="calculateIndividualTotal()" value="@Model.FirstPlacePrize" />
                                 </div>
-                                <span asp-validation-for="FirstPlacePrize" class="text-danger"></span>
                             </div>
-
                             <div class="prize-item">
                                 <h5>2nd Place</h5>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
                                     <input asp-for="SecondPlacePrize" type="number" step="0.01" class="form-control individual-prize-input"
-                                           oninput="calculateIndividualTotal()" placeholder="0.00"
-                                           value="@(Model?.SecondPlacePrize?.ToString("") ?? "")" />
+                                           oninput="calculateIndividualTotal()" value="@Model.SecondPlacePrize" />
                                 </div>
-                                <span asp-validation-for="SecondPlacePrize" class="text-danger"></span>
                             </div>
-
                             <div class="prize-item">
                                 <h5>3rd Place</h5>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
                                     <input asp-for="ThirdPlacePrize" type="number" step="0.01" class="form-control individual-prize-input"
-                                           oninput="calculateIndividualTotal()" placeholder="0.00"
-                                           value="@(Model?.ThirdPlacePrize?.ToString("") ?? "")" />
+                                           oninput="calculateIndividualTotal()" value="@Model.ThirdPlacePrize" />
                                 </div>
-                                <span asp-validation-for="ThirdPlacePrize" class="text-danger"></span>
                             </div>
-
                             <div class="prize-item">
                                 <h5>4th Place</h5>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
                                     <input asp-for="FourthPlacePrize" type="number" step="0.01" class="form-control individual-prize-input"
-                                           oninput="calculateIndividualTotal()" placeholder="0.00"
-                                           value="@(Model?.FourthPlacePrize?.ToString("") ?? "")" />
+                                           oninput="calculateIndividualTotal()" value="@Model.FourthPlacePrize" />
                                 </div>
-                                <span asp-validation-for="FourthPlacePrize" class="text-danger"></span>
                             </div>
-
                             <div class="prize-item">
                                 <h5>5th Place</h5>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
                                     <input asp-for="FifthPlacePrize" type="number" step="0.01" class="form-control individual-prize-input"
-                                           oninput="calculateIndividualTotal()" placeholder="0.00"
-                                           value="@(Model?.FifthPlacePrize?.ToString("") ?? "")" />
+                                           oninput="calculateIndividualTotal()" value="@Model.FifthPlacePrize" />
                                 </div>
-                                <span asp-validation-for="FifthPlacePrize" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="individual-total-display">
-                            <span>Total: </span><span id="individualPrizesTotal">₱0.00</span>
+                            <span>Total: </span><span id="individualPrizesTotal">₱@Model.IndividualPrizesTotal.ToString("N2")</span>
                         </div>
                     </div>
                 </div>
@@ -213,39 +201,36 @@
                 <h3><i class="fas fa-chess-board"></i> Game Settings</h3>
                 <div class="form-group">
                     <label asp-for="TimeControl" class="form-label"></label>
-                    <input asp-for="TimeControl" class="form-control" placeholder="e.g., 90+30"
-                           value="@(Model?.TimeControl ?? "")" />
+                    <input asp-for="TimeControl" class="form-control" placeholder="e.g., 90+30" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Rules" class="form-label"></label>
-                    <textarea asp-for="Rules" class="form-control" rows="4">
-                        @(Model?.Rules ?? "")
-                    </textarea>
+                    <textarea asp-for="Rules" class="form-control" rows="4">@Model.Rules</textarea>
                 </div>
             </div>
 
             <div class="form-section">
                 <h3><i class="fas fa-user-tie"></i> Organizer Information</h3>
-                <div class="form-group">
-                    <label asp-for="OrganizerName" class="form-label"></label>
-                    <input asp-for="OrganizerName" class="form-control" placeholder="Tournament organizer name"
-                           value="@(Model?.OrganizerName ?? "")" />
-                    <span asp-validation-for="OrganizerName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ContactEmail" class="form-label"></label>
-                    <input asp-for="ContactEmail" type="email" class="form-control" placeholder="organizer@example.com"
-                           value="@(Model?.ContactEmail ?? "")" />
-                    <span asp-validation-for="ContactEmail" class="text-danger"></span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="OrganizerName" class="form-label"></label>
+                        <input asp-for="OrganizerName" class="form-control" placeholder="Organizer name" />
+                        <span asp-validation-for="OrganizerName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ContactEmail" class="form-label"></label>
+                        <input asp-for="ContactEmail" type="email" class="form-control" placeholder="contact@example.com" />
+                        <span asp-validation-for="ContactEmail" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="form-actions">
             <button type="submit" class="btn-submit">
-                <i class="fas fa-check"></i> Create Tournament
+                <i class="fas fa-save"></i> Update Tournament
             </button>
-            <a asp-action="Index" class="btn-cancel">
+            <a asp-action="Details" asp-route-id="@Model.TournamentId" class="btn-cancel">
                 <i class="fas fa-times"></i> Cancel
             </a>
         </div>
@@ -266,131 +251,64 @@
             const endDateInput = document.getElementById('EndDate');
             const deadlineInput = document.getElementById('RegistrationDeadline');
 
-            // Only set min attribute, NOT the value
-            if (startDateInput) {
-                // Set min date to current date/time
-                const now = new Date();
-                startDateInput.min = now.toISOString().slice(0, 16);
+            // Set min dates
+            const now = new Date().toISOString().slice(0, 16);
+            startDateInput.min = now;
 
-                // Set up event listener for when start date is changed
-                startDateInput.addEventListener('change', function() {
-                    if (this.value) {
-                        const start = new Date(this.value);
-                        const end = new Date(start.getTime() + (5 * 60 * 60 * 1000));
+            // Update end date when start date changes
+            startDateInput.addEventListener('change', function() {
+                if (this.value) {
+                    const start = new Date(this.value);
+                    const end = new Date(start.getTime() + (5 * 60 * 60 * 1000));
 
-                        // Format for datetime-local
-                        const offset = end.getTimezoneOffset() * 60000;
-                        const localISOTime = (new Date(end - offset)).toISOString().slice(0, 16);
+                    const offset = end.getTimezoneOffset() * 60000;
+                    const localISOTime = (new Date(end - offset)).toISOString().slice(0, 16);
 
-                        if (endDateInput) {
-                            // Auto-fill end date when start date is set
-                            endDateInput.value = localISOTime;
-                            endDateInput.min = this.value;
-                        }
+                    endDateInput.value = localISOTime;
+                    endDateInput.min = this.value;
 
-                        if (deadlineInput) {
-                            deadlineInput.max = this.value;
-                        }
-                    } else {
-                        // Clear end date if start date is cleared
-                        if (endDateInput) {
-                            endDateInput.value = '';
-                        }
+                    if (deadlineInput) {
+                        deadlineInput.max = this.value;
                     }
-                });
-            }
+                }
+            });
 
-            // Initialize prize options based on existing values
+            // Initialize prize options based on current values
             initializePrizeOptions();
         });
 
         function togglePrizeOptions(option) {
             const totalContent = document.getElementById('totalPrizeContent');
             const individualContent = document.getElementById('individualPrizesContent');
-            const totalInput = document.getElementById('totalPrizeInput');
-
-            if (!totalContent || !individualContent) return;
-
-            // Show/hide content
             totalContent.style.display = (option === 'total') ? 'block' : 'none';
             individualContent.style.display = (option === 'individual') ? 'block' : 'none';
 
-            // Clear opposite fields when switching
+            // Clear the other option's values when switching
             if (option === 'total') {
-                // Clear individual prize fields
-                const individualInputs = document.querySelectorAll('.individual-prize-input');
-                if (individualInputs) {
-                    individualInputs.forEach(input => {
-                        input.value = '';
-                    });
-                }
-            } else {
-                // Clear total prize field
-                if (totalInput) {
-                    totalInput.value = '';
-                }
+                document.querySelectorAll('.individual-prize-input').forEach(input => {
+                    input.value = '';
+                });
+                calculateIndividualTotal();
+            } else if (option === 'individual') {
+                document.getElementById('totalPrizeInput').value = '';
             }
-
-            // Update hidden field
-            const selectedOptionField = document.getElementById('SelectedPrizeOption');
-            if (selectedOptionField) {
-                selectedOptionField.value = option;
-            }
-
-            // Recalculate total
-            calculateIndividualTotal();
         }
 
         function calculateIndividualTotal() {
             let total = 0;
-            const individualInputs = document.querySelectorAll('.individual-prize-input');
-
-            if (individualInputs) {
-                individualInputs.forEach(input => {
-                    const value = parseFloat(input.value);
-                    if (!isNaN(value)) {
-                        total += value;
-                    }
-                });
-            }
-
-            const totalDisplay = document.getElementById('individualPrizesTotal');
-            if (totalDisplay) {
-                totalDisplay.textContent = '₱' + total.toFixed(2);
-            }
+            document.querySelectorAll('.individual-prize-input').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('individualPrizesTotal').textContent = '₱' + total.toFixed(2);
         }
 
         function initializePrizeOptions() {
-            // Check if any individual prizes have values from model
-            const individualPrizeInputs = document.querySelectorAll('.individual-prize-input');
-            let hasIndividualValues = false;
-
-            if (individualPrizeInputs) {
-                individualPrizeInputs.forEach(input => {
-                    if (input.value && parseFloat(input.value) > 0) {
-                        hasIndividualValues = true;
-                    }
-                });
-            }
-
-            // Check if total prize has value from model
-            const totalPrizeInput = document.getElementById('totalPrizeInput');
-            const hasTotalValue = totalPrizeInput && totalPrizeInput.value && parseFloat(totalPrizeInput.value) > 0;
-
-            // Default to total option unless individual prizes have values
-            const prizeOptionIndividual = document.getElementById('prizeOptionIndividual');
-            const prizeOptionTotal = document.getElementById('prizeOptionTotal');
-
-            if (hasIndividualValues && !hasTotalValue && prizeOptionIndividual) {
-                prizeOptionIndividual.checked = true;
+            const useIndividual = @(Model.HasIndividualPrizes ? "true" : "false");
+            if (useIndividual) {
                 togglePrizeOptions('individual');
-            } else if (prizeOptionTotal) {
-                prizeOptionTotal.checked = true;
+            } else {
                 togglePrizeOptions('total');
             }
-
-            // Initialize the total display
-            calculateIndividualTotal();
         }
     </script>
 }

@@ -1,1 +1,28 @@
-﻿.vs/
+﻿# Build outputs
+bin/
+obj/
+Debug/
+Release/
+publish/
+
+# .NET Core
+*.dll
+*.exe
+*.pdb
+*.runtimeconfig.json
+*.deps.json
+*.staticwebassets.*
+*.cache
+
+# Project files
+.vs/
+*.user
+*.suo
+*.cache
+*.swp
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo

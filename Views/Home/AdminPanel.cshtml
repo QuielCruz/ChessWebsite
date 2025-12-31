@@ -1,0 +1,272 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel - ChessMasters";
+    ViewBag.IsAdmin = true;
+    ViewBag.IsLoggedIn = true;
+}
+
+<div class="admin-panel-container">
+    <div class="admin-header">
+        <h1><i class="fas fa-user-shield"></i> Admin Panel</h1>
+        <p>Welcome back, @User.Identity.Name! Manage your chess tournaments.</p>
+    </div>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Total Tournaments</h3>
+                <div class="stat-number">@ViewBag.TotalTournaments</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Active Registrations</h3>
+                <div class="stat-number">@ViewBag.ActiveRegistrations</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Upcoming Events</h3>
+                <div class="stat-number">@ViewBag.UpcomingEvents</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-actions">
+        <h2><i class="fas fa-cogs"></i> Quick Actions</h2>
+        <div class="action-grid">
+            <a asp-controller="Tournament" asp-action="Create" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Create Tournament</h3>
+                <p>Create a new chess tournament</p>
+            </a>
+            <a asp-controller="Tournament" asp-action="Index" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <h3>View All Tournaments</h3>
+                <p>Manage existing tournaments</p>
+            </a>
+            <a asp-controller="Account" asp-action="Logout" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h3>Logout</h3>
+                <p>Sign out from admin panel</p>
+            </a>
+        </div>
+    </div>
+
+    <div class="admin-notice">
+        <div class="notice-icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notice-content">
+            <h3>Admin Guidelines</h3>
+            <ul>
+                <li>Always verify tournament details before publishing</li>
+                <li>Double-check prize pool information</li>
+                <li>Ensure registration deadlines are properly set</li>
+                <li>Keep tournament information up to date</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .admin-panel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+        }
+
+            .admin-header h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .admin-header p {
+                font-size: 1.2rem;
+                opacity: 0.9;
+            }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .stat-content h3 {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .admin-actions {
+            margin-bottom: 3rem;
+        }
+
+            .admin-actions h2 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                color: #333;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            display: block;
+        }
+
+            .action-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .action-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .admin-notice {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 2rem;
+            border-radius: 10px;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .notice-icon {
+            font-size: 2rem;
+            color: #ffc107;
+        }
+
+        .notice-content h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #856404;
+        }
+
+        .notice-content ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: #856404;
+        }
+
+        .notice-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        @@media (max-width: 768px) {
+            .admin-header h1
+
+        {
+            font-size: 2rem;
+        }
+
+        .admin-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .action-grid {
+            grid-template-columns: 1fr;
+        }
+
+        }
+    </style>
+}
